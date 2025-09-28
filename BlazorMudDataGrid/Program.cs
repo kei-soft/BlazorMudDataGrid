@@ -6,8 +6,6 @@ using Microsoft.Data.Sqlite;
 
 using MudBlazor.Services;
 
-using MudBlazorSample.Components;
-
 namespace BlazorMudDataGrid;
 
 public class Program
@@ -33,12 +31,12 @@ public class Program
         var app = builder.Build();
 
         // SQLite 데이터베이스 초기화
-        using (var scope = app.Services.CreateScope())
-        {
-            using var connection = scope.ServiceProvider.GetRequiredService<IDbConnection>();
-            connection.Open();
-            DatabaseInitializer.Initialize(connection);
-        }
+        //using (var scope = app.Services.CreateScope())
+        //{
+        //    using var connection = scope.ServiceProvider.GetRequiredService<IDbConnection>();
+        //    connection.Open();
+        //    DatabaseInitializer.Initialize(connection);
+        //}
 
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())

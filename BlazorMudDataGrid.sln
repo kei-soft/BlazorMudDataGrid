@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35818.85 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorMudDataGrid", "BlazorMudDataGrid\BlazorMudDataGrid.csproj", "{23F7C97F-FF62-4E1D-8EAB-177B0307924E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{23F7C97F-FF62-4E1D-8EAB-177B0307924E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23F7C97F-FF62-4E1D-8EAB-177B0307924E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23F7C97F-FF62-4E1D-8EAB-177B0307924E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23F7C97F-FF62-4E1D-8EAB-177B0307924E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {453C35B4-FBEE-4EFF-B654-B39169991DB0}
+	EndGlobalSection
+EndGlobal

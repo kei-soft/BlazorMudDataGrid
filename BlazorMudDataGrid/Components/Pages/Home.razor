@@ -1,0 +1,57 @@
+﻿@page "/"
+@using MudBlazor
+
+<MudDataGrid T="IDictionary<string, object>"
+             Items="@dynamicItems"
+             @ref="dataGrid"
+             Bordered="true"
+             Striped="true"
+             Dense="true">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Dynamic Data Grid</MudText>
+        <MudSpacer />
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="LoadDynamicData">Reload Data</MudButton>
+    </ToolBarContent>
+    <Columns>
+        @foreach (var columnKey in dynamicColumns)
+        {
+            <PropertyColumn Property="@(x => x[columnKey])"
+                            Title="@columnKey"
+                            Sortable="true"
+                            Filterable="true" />
+        }
+    </Columns>
+    <PagerContent>
+        <MudDataGridPager T="IDictionary<string, object>" />
+    </PagerContent>
+</MudDataGrid>
+
+@code {
+    private MudDataGrid<IDictionary<string, object>> dataGrid;
+    private List<IDictionary<string, object>> dynamicItems = new();
+    private List<string> dynamicColumns = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDynamicData();
+    }
+
+    private async Task LoadDynamicData()
+    {
+        // 서버사이드에서 동적 데이터 로드 (예: API나 DB에서)
+        dynamicItems = new List<IDictionary<string, object>>
+        {
+            new Dictionary<string, object> { { "Name", "John Doe" }, { "Age", 30 }, { "City", "Seoul" } },
+            new Dictionary<string, object> { { "Name", "Jane Smith" }, { "Age", 25 }, { "City", "Busan" } },
+            new Dictionary<string, object> { { "Name", "Bob Johnson" }, { "Age", 35 }, { "City", "Incheon" } }
+        };
+
+        // 동적 컬럼 키 추출 (첫 번째 아이템 기준)
+        if (dynamicItems.Any())
+        {
+            dynamicColumns = dynamicItems.First().Keys.ToList();
+        }
+
+        await InvokeAsync(StateHasChanged);
+    }
+}

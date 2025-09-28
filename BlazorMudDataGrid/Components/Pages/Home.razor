@@ -5,15 +5,15 @@
 @inject IDbConnection DbConnection
 
 <MudDataGrid T="IDictionary<string, object>"
-            Items="@bindData"
-            @ref="dataGrid"
-            Bordered="true"
-            Striped="true"
-            Dense="true">
+Items="@bindData"
+@ref="dataGrid"
+Bordered="true"
+Striped="true"
+Dense="true">
     <ToolBarContent>
         <MudText Typo="Typo.h6">Dynamic Data Grid</MudText>
         <MudSpacer />
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="LoadDynamicData">Reload Data</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="LoadDynamicData">Load Data</MudButton>
     </ToolBarContent>
     <Columns>
         <PropertyColumn Property="@(x => x["No"])" Title="No" Sortable="true" Filterable="true"/>
@@ -24,12 +24,22 @@
             Sortable="true"
             Filterable="true" />
         }
-        <PropertyColumn Property="@(x => x["IsChecked"])" Title="Cb" Sortable="true" Filterable="true" >
+
+        <PropertyColumn Property="@(x => x["IsChecked"])" Title="Cb" Sortable="false" Filterable="false">
             <CellTemplate>
                 <MudCheckBox T="bool"
-                             Color="Color.Primary"/>
+                Value="@((bool)context.Item["IsChecked"])"
+                ValueChanged="@(async (bool value) => await OnCheckboxChanged(context.Item, value))"
+                Color="Color.Primary" />
             </CellTemplate>
         </PropertyColumn>
+
+        @* <PropertyColumn Property="@(x => x["IsChecked"])" Title="Cb" Sortable="true" Filterable="true" > *@
+        @*     <CellTemplate> *@
+        @*         <MudCheckBox T="bool" *@
+        @*                      Color="Color.Primary"/> *@
+        @*     </CellTemplate> *@
+        @* </PropertyColumn> *@
     </Columns>
     <PagerContent>
         <MudDataGridPager T="IDictionary<string, object>" />
@@ -39,7 +49,6 @@
 @code {
     private MudDataGrid<IDictionary<string, object>> dataGrid;
     private List<IDictionary<string, object>> bindData = new();
-    private IEnumerable<dynamic> dynamicItems;
     private List<string> dynamicColumns = new();
 
     protected override async Task OnInitializedAsync()
@@ -47,9 +56,17 @@
         await LoadDynamicData();
     }
 
+    private async Task OnCheckboxChanged(IDictionary<string, object> item, bool isChecked)
+    {
+        // 해당 항목의 IsChecked 값 업데이트
+        item["IsChecked"] = isChecked;
+
+        await InvokeAsync(StateHasChanged);
+    }
+
     private async Task LoadDynamicData()
     {
-        dynamicItems = await DbConnection.QueryAsync("SELECT * FROM Products");
+        IEnumerable<dynamic> dynamicItems = await DbConnection.QueryAsync("SELECT * FROM Products");
 
         int no = 1;
         bindData = new();
@@ -63,7 +80,6 @@
 
             if (expando != null)
             {
-                // ExpandoObject의 키-값 쌍을 Dictionary로 복사
                 foreach (var kvp in expando)
                 {
                     dictionary[kvp.Key] = kvp.Value;
@@ -71,7 +87,7 @@
             }
 
             // No 컬럼 추가
-            dictionary["IsChecked"] = false;
+            dictionary["IsChecked"] = no % 2 == 0 ? false : true;
 
             bindData.Add(dictionary);
         }
